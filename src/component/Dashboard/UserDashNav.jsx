@@ -3,7 +3,6 @@ import API from '../../services/api'
 import { FaBell, FaInfo, FaList, FaUser } from 'react-icons/fa6'
 import { FiLogOut, FiSettings } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
-import DefaultInput from '../Form/DefaultInput'
 
 const UserDashNav = () => {
 
@@ -45,16 +44,18 @@ const UserDashNav = () => {
 
     }, [token])
 
-    // Close dropdown when clicking outside
+    // Close dropdown outside click
     useEffect(() => {
 
         const handleClickOutside = (event) => {
+
             if (
                 menuRef.current &&
                 !menuRef.current.contains(event.target)
             ) {
                 setOpen(false)
             }
+
         }
 
         document.addEventListener("mousedown", handleClickOutside)
@@ -73,96 +74,132 @@ const UserDashNav = () => {
         navigate('/')
     }
 
-    return (
-        <div className="">
-            <div className='flex justify-between items-center px-8 py-4 border-b border-gray-200 bg-white'>
+    const handleNavigate = (path) => {
+        navigate(path)
+        setOpen(false)
+    }
 
-                <div className=''>
-                    <h1 className="text-2xl font-bold">
+    return (
+        <div className='border-b border-gray-200 bg-white sticky top-0 z-40'>
+
+            <div className='flex justify-between items-center px-8 py-4'>
+
+                {/* Logo */}
+                <div>
+                    <h1 className='text-2xl font-bold tracking-tight'>
                         Research Portal
                     </h1>
                 </div>
 
-                <div className='flex items-center gap-5 relative' ref={menuRef}>
+                {/* Right Side */}
+                <div
+                    className='flex items-center gap-5 relative'
+                    ref={menuRef}
+                >
 
                     {/* Notification */}
-                    <a href="">
+                    <button className='relative'>
                         <FaBell
                             size={20}
-                            className='hover:fill-gray-500 duration-300'
+                            className='hover:text-gray-500 duration-300'
                         />
-                    </a>
 
-                    {/* Profile Image */}
+                        <span className='absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full'></span>
+                    </button>
+
+                    {/* Profile */}
                     <img
                         onClick={() => setOpen(!open)}
-                        src={`${import.meta.env.VITE_APP_API_FILES}${profile?.profile_img}`}
+                        src={
+                            profile?.profile_img
+                                ? `${import.meta.env.VITE_APP_API_FILES}${profile.profile_img}`
+                                : "/default-user.png"
+                        }
                         alt="profile"
-                        className='w-10 h-10 rounded-full object-cover cursor-pointer border-2 border-gray-200 hover:border-gray-400 duration-300'
+                        className='w-11 h-11 rounded-full object-cover cursor-pointer border-2 border-gray-200 hover:border-blue-400 duration-300'
                     />
 
+                    {/* Dropdown */}
+                    <div
+                        className={`
+                            absolute top-16 right-0 w-60 bg-white rounded-2xl
+                            shadow-xl border border-gray-100 overflow-hidden
+                            transition-all duration-300 origin-top-right
+                            ${open
+                                ? "opacity-100 scale-100 visible"
+                                : "opacity-0 scale-95 invisible"}
+                        `}
+                    >
 
-                    {
-                        open && (
-                            <div className='absolute top-14 right-0 w-52 bg-white shadow-lg border border-gray-200 overflow-hidden z-50'>
+                        {/* User Info */}
+                        <div className='p-4 border-b border-gray-100 bg-gray-50'>
 
-                                <div className="p-4 border-b border-gray-100">
-                                    <h1 className="">Hi, {profile?.fname}</h1>
-                                </div>
+                            <h1 className='font-semibold text-lg'>
+                                Hi, {profile?.fname}
+                            </h1>
 
-                                <div className="border-b border-gray-100">
-                                    <button
-                                        onClick={() => navigate('/profile')}
-                                        className='w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-100 hover:border-l hover:border-blue-500 duration-200 text-left'
-                                    >
-                                        <FaUser size={18} />
-                                        My Profile
-                                    </button>
+                            <p className='text-sm text-gray-500 truncate'>
+                                {profile?.bio}
+                            </p>
 
-                                    <button
-                                        onClick={() => navigate('/profile')}
-                                        className='w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-100 hover:border-l hover:border-blue-500 duration-200 text-left'
-                                    >
-                                        <FaList size={18} />
-                                        Saved List
-                                    </button>
-                                </div>
+                        </div>
 
+                        {/* Menu */}
+                        <div className='py-2'>
 
-                                <div className="border-b border-gray-100">
+                            <button
+                                onClick={() => handleNavigate('/profile')}
+                                className='w-full flex items-center gap-3 px-5 py-3 hover:bg-gray-100 duration-200 text-left'
+                            >
+                                <FaUser size={16} />
+                                My Profile
+                            </button>
 
-                                    <button
-                                        onClick={() => navigate('/settings')}
-                                        className='w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-100 hover:border-l hover:border-blue-500 duration-200 text-left'
-                                    >
-                                        <FiSettings size={18} />
-                                        Settings
-                                    </button>
-                                    <button
-                                        onClick={() => navigate('/profile')}
-                                        className='w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-100 hover:border-l hover:border-blue-500 duration-200 text-left'
-                                    >
-                                        <FaInfo size={18} />
-                                        Help Center
-                                    </button>
-                                </div>
+                            <button
+                                onClick={() => handleNavigate('/saved')}
+                                className='w-full flex items-center gap-3 px-5 py-3 hover:bg-gray-100 duration-200 text-left'
+                            >
+                                <FaList size={16} />
+                                Saved List
+                            </button>
 
+                            <button
+                                onClick={() => handleNavigate('/settings')}
+                                className='w-full flex items-center gap-3 px-5 py-3 hover:bg-gray-100 duration-200 text-left'
+                            >
+                                <FiSettings size={16} />
+                                Settings
+                            </button>
 
-                                <button
-                                    onClick={handleLogout}
-                                    className='w-full flex items-center gap-3 px-4 py-3 hover:bg-red-100 hover:border-l hover:border-red-500 text-red-600 duration-200 text-left'
-                                >
-                                    <FiLogOut size={18} />
-                                    Logout
-                                </button>
+                            <button
+                                onClick={() => handleNavigate('/help')}
+                                className='w-full flex items-center gap-3 px-5 py-3 hover:bg-gray-100 duration-200 text-left'
+                            >
+                                <FaInfo size={16} />
+                                Help Center
+                            </button>
 
-                            </div>
-                        )
-                    }
+                        </div>
+
+                        {/* Logout */}
+                        <div className='border-t border-gray-100'>
+
+                            <button
+                                onClick={handleLogout}
+                                className='w-full flex items-center gap-3 px-5 py-3 hover:bg-red-50 text-red-600 duration-200 text-left'
+                            >
+                                <FiLogOut size={16} />
+                                Logout
+                            </button>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
             </div>
+
         </div>
     )
 }

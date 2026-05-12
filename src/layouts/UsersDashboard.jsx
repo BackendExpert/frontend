@@ -1,5 +1,6 @@
 import React from 'react'
 import UserDashNav from '../component/Dashboard/UserDashNav'
+import { Outlet } from 'react-router-dom'
 
 const UsersDashboard = () => {
     return (
@@ -7,8 +8,10 @@ const UsersDashboard = () => {
             <div className="mb-4">
                 <UserDashNav />
             </div>
-            <div className="xl:max-w-7xl xl:mx-auto mx-8">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Esse, mollitia sequi. Vitae praesentium, similique quaerat magnam ad totam, dolores quisquam commodi provident aliquam explicabo, at sapiente. Distinctio saepe ullam exercitationem.
+            <div className="xl:max-w-7xl xl:mx-auto">
+                <div className='mt-6 md:ml-8 ml-4 mr-2'>
+                    <Outlet />
+                </div>
             </div>
         </div>
     )

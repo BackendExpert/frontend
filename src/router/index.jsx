@@ -6,6 +6,7 @@ import PrivateRoute from './PrivateRoute'
 import Dashboard from '../layouts/Dashboard'
 import UsersDashboard from '../layouts/UsersDashboard'
 import Unauthorized from './Unauthorized'
+import UserDash from '../pages/DashBoard/UserDashBoard/UserDash'
 
 function App() {
     return (
@@ -21,8 +22,8 @@ function App() {
 
                 </Route>
 
-                <Route path='/profile' element={<PrivateRoute roles={['researcher', 'independent_researcher', 'supervisor', 'reviewer']}> <UsersDashboard /> </PrivateRoute>} >
- 
+                <Route path='/profile' element={<PrivateRoute roles={['super_admin', 'institution_admin', 'researcher', 'independent_researcher', 'supervisor', 'reviewer']}> <UsersDashboard /> </PrivateRoute>} >
+                    <Route index element={<PrivateRoute roles={['super_admin', 'institution_admin', 'researcher', 'independent_researcher', 'supervisor', 'reviewer']}> <UserDash /> </PrivateRoute>} />
                 </Route>
 
 
